@@ -1,0 +1,14 @@
+asgiref==3.8.1
+backports.zoneinfo==0.2.1
+crispy-bootstrap5==2025.6
+django==4.2.21
+django-appconf==1.0.6
+django-compressor==4.5.1
+django-crispy-forms==2.4
+django-libsass==0.9
+django-sass-processor==1.4.1
+libsass==0.23.0
+rcssmin==1.1.2
+rjsmin==1.2.2
+sqlparse==0.5.3
+typing-extensions==4.13.2

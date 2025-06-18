@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+{% block header %}Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6"> {# Columna que ocupa 100% en móvil, 8/12 en tablet, 6/12 en escritorio #}
+            <div class="card mt-5 p-4 shadow-sm">
+                {% if user.is_authenticated %}
+                    {% if user.profile %}
+                        <h2 class="display-2">Perfil de {{ user.username }}</h2>
+                        
+                        <p>Email: {{ user.email }}</p>
+                        <p>Nombre: {{ user.profile.name }}</p>
+                        <p>Fecha de Registro: {{ user.date_joined }}</p>
+                    {% else %}
+                        <h2 class="display-2">Welcome {{ user.username }}</h2>
+                        <p>No hay información de perfil disponible.</p>
+                    {% endif %}
+                    <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'user_account:password_change' %}">Change password</a>
+                {% else %}
+                    <h2>Por favor, inicia sesión para ver tu perfil.</h2>
+                    <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'user_account:login' %}">Iniciar Sesión</a>
+                {% endif %}
+            </div>
+        </div>  
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Task{% endblock %}
+{% block header %}Create a New Task{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center"> 
+        <div class="col-12 col-md-8 col-lg-6"> 
+            <div class="card mt-5 p-4 shadow-sm"> 
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form | crispy }}
+                    <div class="mb-3 text-center">
+                        <button  class="btn btn-primary" type="submit">Create Task</button>
+                    </div>
+                    <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'tasks:list_view' %}">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

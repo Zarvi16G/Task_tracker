@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+<!-- {# Load static files #}
+{% load static %} -->
+
+{# Set the title of the page #}
+{% block title %}Task List{% endblock %}
+
+{# Set the header of the page #}
+{% block header %}Task List{% endblock %}
+
+{# Main content of the page #}
+{% block content %}
+    <div class="container mt-4"> {# mt-4 para un margen superior #}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <form method="post" action="{% url 'tasks:task_create' %}">
+        {% csrf_token %}
+        <button class="btn btn-sm" title="Create Task">
+            <span class="material-symbols-outlined">add_circle</span>
+        </button>
+    </form>
+    <table class="table">
+        {% if tasks %}
+            <thead>
+                <tr>
+                <th scope="col">Task number</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+                <th scope="col">Creation date</th>
+                <th scope="col">Update date</th>
+                <th scope="col">Assigned to</th>
+                <th scope="col">Update</th>
+                <th scope="col">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in tasks %}
+                    <tr> 
+                        <th scope="row">{{ task.id }}</th>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.description }}</td>
+                        {% if task.completed %}
+                            <td>Completed</td>
+                        {% else %}
+                            <td>Pending</td>
+                        {% endif %}
+                        <td>{{ task.created_at|date:"Y-m-d H:i" }}</td>
+                        <td>{{ task.updated_at|date:"Y-m-d H:i" }}</td>
+                        {% if request.user.is_authenticated and user == task.created_by %}
+                            <td>{{ task.created_by }}</td>
+                        {% else %}
+                            <td>Anonymous</td>
+                        {% endif %}
+                        <td>
+                            <form action="{% url 'tasks:task_update' task.pk %}" method="get" class="d-inline">
+                                <button type="submit" class="btn btn-sm" title="Edit Task">
+                                    <span class="material-symbols-outlined">edit</span>
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url 'tasks:task_delete' task.pk %}" method="post" class="d-inline ms-2">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm" title="Delete Task"
+                                    onclick="return confirm('¿Estás seguro de que quieres eliminar la tarea &quot;{{ task.title }}&quot;?');">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        {% else %}
+            <h1 class="display-3">No tasks found. Create one!</h1>
+            <a class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover" href="{% url 'tasks:task_create' %}">Create task</a>
+        {% endif %}
+    </table>
+{% endblock %}
